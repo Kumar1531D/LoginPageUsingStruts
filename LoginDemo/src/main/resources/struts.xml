@@ -20,5 +20,12 @@
   
   </package>
   
+  <!-- Authentication -->
+  <package name = "authentication" namespace = "/" extends = "struts-default">
+  	
+  	<action name = "authenticate" class="com.logindemo.action.AuthenticateAction"></action>
+  
+  </package>
+  
   
 </struts>

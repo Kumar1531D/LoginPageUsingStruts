@@ -12,7 +12,7 @@ public class DatabaseService {
 	private String user = "muthu-24209";
 	private String pass = "stupyfy";
 	
-	public boolean loginCheck(String userName, String password) {
+	public String loginCheck(String userName) {
 		
 		Connection con = null;
 		
@@ -21,20 +21,20 @@ public class DatabaseService {
 			
 			con = DriverManager.getConnection(url,user,pass);
 			
-			String query = "select Username from UserDetail where Username = ? and password = ?;";
+			String query = "select password from UserDetail where Username = ?;";
 			
 			PreparedStatement ps = con.prepareStatement(query);
 			
 			ps.setString(1, userName);
-			ps.setString(2,password);
+//			ps.setString(2,password);
 			
 			ResultSet rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				return true;
+				return rs.getString("password");
 			}
 			
-			return false;
+			return null;
 			
 			
 		} catch (SQLException e) {
@@ -52,15 +52,13 @@ public class DatabaseService {
 			}
 		}
 		
-		return false;
+		return null;
 		
 	}
 	
 	public boolean insertNewUser(String userName,String password,String email) {
 		
 		Connection con = null;
-		
-		System.out.println("Insert a new user "+userName);
 		
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -101,7 +99,7 @@ public class DatabaseService {
 			}
 		}
 
-		return true;
+		return false;
 		
 	}
 	

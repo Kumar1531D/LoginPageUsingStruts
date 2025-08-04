@@ -2,7 +2,7 @@
 $("#signupForm").submit(function(e){
 	e.preventDefault();
 	
-	$.post("signupUser",{
+	$.post("/LoginDemo/signupUser",{
 		userName : $("#userName").val(),
 		password : $("#password").val(),
 		email : $("#email").val()
@@ -18,3 +18,11 @@ $("#signupForm").submit(function(e){
 		
 	})
 })
+
+
+$("#loginLink").on("click", function(e) {
+    e.preventDefault(); 
+    $("#loginBody").load('Login.html', function() {
+        history.pushState(null, null, 'login');
+    });
+});

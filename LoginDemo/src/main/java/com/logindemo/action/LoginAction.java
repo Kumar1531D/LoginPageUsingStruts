@@ -8,28 +8,52 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.ServletActionContext;
 
 import com.logindemo.service.DatabaseService;
+import com.logindemo.service.PasswordEncryptService;
+import com.logindemo.service.TokenGenerationService;
 import com.opensymphony.xwork2.ActionSupport;
 
 
 public class LoginAction extends ActionSupport{
 	
 	private String userName;
-	private String password;
+	private char[] password;
 	
 	public String execute() throws IOException {
 		
 		DatabaseService databaseService = new DatabaseService();
 		
-		HttpServletResponse response = ServletActionContext.getResponse();
-	    response.setContentType("text/plain");
-	 
+		TokenGenerationService tokenGenerationService = new TokenGenerationService();
 		
-		if(databaseService.loginCheck(userName, password)) {
-			response.getWriter().write("success");
+		HttpServletResponse response = ServletActionContext.getResponse();
+	    response.setContentType("text/json");
+	    response.setCharacterEncoding("UTF-8");
+	    
+	    String token = tokenGenerationService.generateToken(userName);
+	    String jsonResponse = " ";
+	    
+	    String encryptedPassword = databaseService.loginCheck(userName);
+	    
+	    boolean isPasswordCorrect ;
+	    
+		try {
+			isPasswordCorrect = PasswordEncryptService.validatePassword(password, encryptedPassword);
+		} 
+		catch (Exception e) {
+			isPasswordCorrect = false; 
+		}
+		
+		for(int i=0;i<password.length;i++) {
+			password[i] = '\u0000';
+		}
+		
+		if(isPasswordCorrect) {
+			jsonResponse = "{ \"status\": \"success\", \"token\": \"" + token + "\", \"userName\" : \""+userName+"\" }";	
 		}
 		else {
-			response.getWriter().write("error");
+			jsonResponse = "{ \"status\": \"error\", \"message\": \" not a valid user \" }";
 		}
+		
+		response.getWriter().write(jsonResponse);
 		
 		return NONE;
 		
@@ -43,14 +67,12 @@ public class LoginAction extends ActionSupport{
 		this.userName = userName;
 	}
 
-	public String getPassword() {
+	public char[] getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(char[] password) {
 		this.password = password;
 	}
-	
-	
 
 }
