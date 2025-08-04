@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://tuckey.org/res/dtds/urlrewrite4.0.dtd">
+
+<urlrewrite>
+    <rule>
+        <name>SPA fallback</name>
+        <condition type="request-uri" operator="notequal">/Login.html</condition>
+        <condition type="request-uri" operator="notequal">/login.action</condition>
+        <from>^/([a-zA-Z0-9_-]+)$</from>
+        <to>/Login.html</to>
+    </rule>
+</urlrewrite>

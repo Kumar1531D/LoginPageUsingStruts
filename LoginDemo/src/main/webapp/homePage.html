@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Home</title>
+ <link rel="stylesheet" href="homePage.css">
+  
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="logo">MyShop</div>
+    <div class="nav-links">
+      <div class="nav-item" id = "homeButton">Home</div>
+      <div class="nav-item">Products
+        <div class="dropdown-content">
+          <a href="#" class="product-link" data-category="electronics">Electronics</a>
+          <a href="#" class="product-link" data-category="fashion">Fashion</a>
+          <a href="#" class="product-link" data-category="books">Books</a>
+        </div>
+      </div>
+      <div class="nav-item signout">
+        <button class="signout-btn" id="signoutBtn">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <div class = "container" id="content">
+    <h2>Welcome <span id = "nameDisplay"></span></h2>
+    <p>Select a product category from the navigation bar.</p>
+  </div>
+  
+  <div class = "container hidden" id = "productDisplay" >
+  	<h2 id = "heading"> </h2>
+  	<p id = "para"></p>
+  </div>
+  
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src = "homePage.js"></script>
+</body>
+</html>
