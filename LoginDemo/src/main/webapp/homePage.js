@@ -42,13 +42,14 @@ function isValidUser() {
 $("#signoutBtn").on('click',function(e){
 	e.preventDefault();
 	
-	localStorage.removeItem("jwt");
 	
 	let confirmationForSignout = confirm("Are you sure want to Signout")
 	
 	if(confirmationForSignout){
+		localStorage.removeItem("jwt");
+		localStorage.removeItem("userName");
 		window.location.href = "Login.html";
-		window.location.replace("login.html");
+		window.location.replace("Login.html");
 	}
 })
 
