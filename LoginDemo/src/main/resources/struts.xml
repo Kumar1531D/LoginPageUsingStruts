@@ -10,6 +10,12 @@
   <package name = "login" namespace = "/" extends = "struts-default">
   	
   	<action name = "checkUser" class="com.logindemo.action.LoginAction"></action>
+  	
+  	<action name="*" class="com.logindemo.action.UrlRedirectionAction">
+    	<result name="success">/homePage.html</result> 
+    	<result name="error">/error.html</result> 
+	</action> 
+  	
   
   </package>
   

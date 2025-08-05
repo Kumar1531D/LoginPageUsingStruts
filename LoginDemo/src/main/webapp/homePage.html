@@ -7,6 +7,13 @@
 </head>
 <body>
 
+<script type="text/javascript">
+	if(!localstorage.getItem("jwt")){
+		alert("Please Sign in to continue");
+		window.location.href = "Login.html";
+	}
+</script>
+
   <div class="navbar">
     <div class="logo">MyShop</div>
     <div class="nav-links">

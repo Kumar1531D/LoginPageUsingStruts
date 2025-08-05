@@ -55,6 +55,10 @@ public class LoginAction extends ActionSupport{
 		
 		response.getWriter().write(jsonResponse);
 		
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+		response.setHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", 0);
+		
 		return NONE;
 		
 	}

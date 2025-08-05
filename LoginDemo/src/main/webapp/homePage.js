@@ -1,4 +1,5 @@
 window.addEventListener('load', isValidUser);
+window.addEventListener('DOMContentLoaded', handleUrl);
 
 function isValidUser() {
 	let token1 = localStorage.getItem('jwt');
@@ -8,6 +9,10 @@ function isValidUser() {
 		window.location.href = 'Login.html';
 		return;
 	}
+	else{
+		document.body.style.display = 'block';
+	}
+	
 
 	$.ajax({
 		url: 'authenticate',
@@ -39,9 +44,12 @@ $("#signoutBtn").on('click',function(e){
 	
 	localStorage.removeItem("jwt");
 	
-	alert("You are being signing out!")
+	let confirmationForSignout = confirm("Are you sure want to Signout")
 	
-	window.location.href = "Login.html";
+	if(confirmationForSignout){
+		window.location.href = "Login.html";
+		window.location.replace("login.html");
+	}
 })
 
 
@@ -50,8 +58,6 @@ $(".product-link").on('click',function(e){
 	
 	const category = $(this).data("category");
 	
-	$('#productDisplay').removeClass("hidden");
-	$('#content').addClass("hidden");
 	history.pushState(null,null,category);
 	loadProductPage(category)
 })
@@ -69,6 +75,10 @@ window.onpopstate = function(event) {
 
 function loadProductPage(category){
 	
+	
+	$('#productDisplay').removeClass("hidden");
+	$('#content').addClass("hidden");
+	
 	$("#heading").text(category);
 	$("#para").text(`You are selecting ${category}`);
 	
@@ -82,21 +92,19 @@ function showHome(){
 
 function handleUrl(){
 	
-	let path = window.location.pathname.split('/').pop();
-	
-	if (!path || path.toLowerCase() === "home" || path.toLowerCase() === "homePage.html") {
+	let path = window.location.pathname.split('/').pop().toLowerCase();
+		
+	if (!path || path.toLowerCase() === "home" || path === "homepage.html") {
 		showHome();
 	} else {
 		loadProductPage(path);
 	}
 	
+	
 }
 
 $(document).ready(function () {
-	const path = window.location.pathname.split("/").pop();
-	if (path && path !== "LoginDemo") {
-		loadProductPage(path);
-	}
+	handleUrl();
 });
 
 
