@@ -20,7 +20,7 @@ public class PasswordEncryptService {
 
     public static byte[] generateSalt() {
         SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16]; 
+        byte[] salt = new byte[16];
         random.nextBytes(salt);
         return salt;
     }
@@ -35,6 +35,8 @@ public class PasswordEncryptService {
         String[] parts = storedSaltAndHash.split(":");
         byte[] salt = Base64.getDecoder().decode(parts[0]);
         String hashedInput = hashPassword(password, salt);
+        
+        System.out.println(" "+parts[1].trim());
         
         return hashedInput.trim().equals(parts[1].trim());
  

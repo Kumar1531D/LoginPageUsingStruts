@@ -7,22 +7,15 @@
 </head>
 <body>
 
-<script type="text/javascript">
-	if(!localstorage.getItem("jwt")){
-		alert("Please Sign in to continue");
-		window.location.href = "Login.html";
-	}
-</script>
-
   <div class="navbar">
     <div class="logo">MyShop</div>
     <div class="nav-links">
       <div class="nav-item" id = "homeButton">Home</div>
       <div class="nav-item">Products
         <div class="dropdown-content">
-          <a href="#" class="product-link" data-category="electronics">Electronics</a>
-          <a href="#" class="product-link" data-category="fashion">Fashion</a>
-          <a href="#" class="product-link" data-category="books">Books</a>
+          <a href="#" class="product-link" data-category="Mobile">Mobile</a>
+          <a href="#" class="product-link" data-category="Laptop">Laptop</a>
+          <a href="#" class="product-link" data-category="Kitchenware">Kitchenware</a>
         </div>
       </div>
       <div class="nav-item signout">
@@ -41,6 +34,16 @@
   	<p id = "para"></p>
   </div>
   
+  <div class = "container" id = "product-list"> 
+  </div>
+  
+  <template id="product-template">
+	  <div class="product-card">
+	    <h3 class="product-name"></h3>
+	    <p class="product-category"></p>
+	    <ul class="product-attributes"></ul>
+	  </div>
+  </template>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src = "homePage.js"></script>

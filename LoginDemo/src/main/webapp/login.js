@@ -3,12 +3,14 @@ $("#loginForm").submit( function(e){
 	
 	e.preventDefault();
 	
+	const $form = $(this);
+	
 	$.ajax({
 		url : 'checkUser',
 		type : "POST",
 		data : {
-				userName : $("#userName").val(),
-				password : $("#password").val()
+				userName : $form.find("input[name='userName']").val(),
+				password : $form.find("input[name='password']").val()
 				},
 		dataype : 'json',
 		
@@ -24,6 +26,28 @@ $("#loginForm").submit( function(e){
 		}
 	});
 });
+
+$("#signupForm").submit(function(e){
+	e.preventDefault();
+	
+	const $form = $(this);
+	
+	$.post("/LoginDemo/signupUser",{
+		userName : $form.find("input[name='userName']").val(),
+		password : $form.find("input[name='password']").val(),
+		email : $form.find("input[name='email']").val()
+	},function(data){
+		
+		if(data.includes("success")){
+			alert("Signup successful ")
+			loadLogin();
+		}
+		else{
+			alert("Something is wrong! Try Again!");
+		}
+		
+	})
+})
 
 $("#signupLink").on("click", function(e) {
 	loadSignup(e);

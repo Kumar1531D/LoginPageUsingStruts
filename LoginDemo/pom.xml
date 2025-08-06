@@ -49,10 +49,11 @@
 	</dependency>
 	
 	<dependency>
-	    <groupId>org.apache.struts</groupId>
-	    <artifactId>struts2-json-plugin</artifactId>
-	    <version>6.3.0</version> <!-- use version compatible with your Struts version -->
+    <groupId>org.apache.struts</groupId>
+    <artifactId>struts2-json-plugin</artifactId>
+    <version>6.3.0</version>
 	</dependency>
+
 
 	<dependency>
         <groupId>io.jsonwebtoken</groupId>

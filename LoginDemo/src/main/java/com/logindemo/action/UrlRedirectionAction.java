@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 
+import com.logindemo.service.CheckValidUrlService;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UrlRedirectionAction extends ActionSupport{
@@ -12,12 +13,11 @@ public class UrlRedirectionAction extends ActionSupport{
 		
 		HttpServletRequest request = ServletActionContext.getRequest();
 
-        String fullUrl = request.getRequestURL().toString();  // Full URL
         String path = request.getRequestURI();  
         
-        
-		if(path.endsWith("books") || path.endsWith("electronics") || path.endsWith("fashion") || path.endsWith("home") )
+		if(new CheckValidUrlService().isValid(path)) {
 			return SUCCESS;
+		}
 		
 		return ERROR;
 	}

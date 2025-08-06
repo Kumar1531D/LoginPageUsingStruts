@@ -9,7 +9,7 @@ $("#signupForm").submit(function(e){
 	},function(data){
 		
 		if(data.includes("success")){
-			alert("Signup successful :)");
+			alert("Signup successful :");
 			window.location.href = "Login.html";
 		}
 		else{

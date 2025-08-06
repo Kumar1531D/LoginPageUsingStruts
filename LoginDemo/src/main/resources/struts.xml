@@ -5,33 +5,55 @@
     "https://struts.apache.org/dtds/struts-6.0.dtd">
 
 <struts>
-	
+
 	<!-- Login -->
-  <package name = "login" namespace = "/" extends = "struts-default">
-  	
-  	<action name = "checkUser" class="com.logindemo.action.LoginAction"></action>
-  	
-  	<action name="*" class="com.logindemo.action.UrlRedirectionAction">
-    	<result name="success">/homePage.html</result> 
-    	<result name="error">/error.html</result> 
-	</action> 
-  	
-  
-  </package>
-  
-  <!-- Signup -->
-  <package name = "signup" namespace = "/" extends = "struts-default">
-  	
-  	<action name = "signupUser" class="com.logindemo.action.SignupAction"></action>
-  
-  </package>
-  
-  <!-- Authentication -->
-  <package name = "authentication" namespace = "/" extends = "struts-default">
-  	
-  	<action name = "authenticate" class="com.logindemo.action.AuthenticateAction"></action>
-  
-  </package>
-  
-  
+	<!-- <package name = "login" namespace = "/" extends = "struts-default"> 
+		<action name = "checkUser" class="com.logindemo.action.LoginAction"></action> 
+		<action name="*" class="com.logindemo.action.UrlRedirectionAction"> <result 
+		name="success">/homePage.html</result> <result name="error">/error.html</result> 
+		</action> </package> -->
+
+	<!-- Signup -->
+	<!-- <package name = "signup" namespace = "/" extends = "struts-default"> 
+		<action name = "signupUser" class="com.logindemo.action.SignupAction"></action> 
+		</package> -->
+	<!-- Authentication -->
+	<!-- <package name = "authentication" namespace = "/" extends = "struts-default"> 
+		<action name = "authenticate" class="com.logindemo.action.AuthenticateAction"></action> 
+		</package> -->
+
+
+	<package name="jsonPackage" namespace = "/products" extends="json-default">
+	    <action name="getProducts" class="com.logindemo.action.ProductAction">
+	        <result type="json">
+	            <param name="root">products</param>
+	        </result>
+	    </action>
+	</package>
+
+
+	<!-- Testing -->
+
+	<package name="auth" namespace="/" extends="struts-default">
+
+		<action name="checkUser" class="com.logindemo.action.UserAuthAction" method="login"></action>
+
+		<action name="*" class="com.logindemo.action.UrlRedirectionAction">
+			<result name="success">/homePage.html</result>
+			<result name="error">/error.html</result>
+		</action>
+
+		<action name="signupUser" class="com.logindemo.action.UserAuthAction" method="signup"></action>
+
+		<action name="authenticate" class="com.logindemo.action.UserAuthAction" method="authenticate"></action>
+
+	</package>
+
+
+	<!-- <constant name="struts.action.extension" value="action,json" />  -->
+
+	
+
+
+
 </struts>
