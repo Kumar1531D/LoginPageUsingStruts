@@ -1,4 +1,4 @@
-window.addEventListener('load', isValidUser);
+//window.addEventListener('load', isValidUser);
 window.addEventListener('DOMContentLoaded', handleUrl);
 window.addEventListener('storage',function(e){
 	if(e.key === 'logout'){
@@ -12,13 +12,12 @@ function isValidUser() {
 
 	if (token1 == null) {
 		alert("Please login before entering!");
-		window.location.href = 'Login.html';
+		window.location.href = 'login';
 		return;
 	}
 	else{
 		document.body.style.display = 'block';
 	}
-	
 
 	$.ajax({
 		url: 'authenticate',
@@ -34,8 +33,7 @@ function isValidUser() {
 			}
 			else{
 				document.getElementById("nameDisplay").textContent = localStorage.getItem('userName');
-			}
-			
+			}	
 		},
 		error: function() {
 			alert("Server error. Please login again.");
@@ -47,73 +45,86 @@ function isValidUser() {
 
 $("#signoutBtn").on('click',function(e){
 	e.preventDefault();
-	
-	
 	let confirmationForSignout = confirm("Are you sure want to Signout")
 	
 	if(confirmationForSignout){
 		localStorage.removeItem("jwt");
 		localStorage.removeItem("userName");
 		localStorage.setItem('logout',Date.now())
-		window.location.href = "Login.html";
-		window.location.replace("Login.html");
+		$.ajax({
+            url: 'logout',
+            type: 'POST',
+        });
+         window.location.replace("login");
+         window.location.href = 'login';
 	}
 })
 
 
-$(".product-link").on('click',function(e){
+$(document).on('click', '.category-link', function(e) {
 	e.preventDefault();
-	
+
 	const category = $(this).data("category");
-	
-	history.pushState(null,null,category);
-	loadProductPage(category)
-})
+
+	history.pushState(null, null, category);
+	loadProductPage(category);
+});
+
 
 $("#homeButton").on('click',function(e){
 	e.preventDefault();
 	history.pushState(null,null,'home');
 	showHome();
-	
 })
+
+$("#categoryButton").on('click',function(e){
+	e.preventDefault();
+	history.pushState(null,null,'category');
+	
+	loadCategory();
+})
+
 
 window.onpopstate = function(event) {
     handleUrl();
 };
 
 function loadProductPage(category){
-	
-	
 	$('#productDisplay').removeClass("hidden");
 	$('#content').addClass("hidden");
 	
 	$("#heading").text(category);
 	$("#para").text(`You are selecting ${category}`);
+	console.log("in loadproductpage")
 	loadProducts(category);
-	
-	
 }
 
 function showHome(){
 	$('#content').removeClass("hidden");
 	$('#productDisplay').addClass("hidden");
 	$('#product-list').addClass("hidden");
+	$('#category-links').addClass('hidden');
 }
 
 function handleUrl(){
 	
-	let path = window.location.pathname.split('/').pop().toLowerCase();
+	let path = window.location.pathname.split('/').pop();
 		
 	if (!path || path.toLowerCase() === "home" || path === "homepage.html") {
 		showHome();
-	} else {
+	}
+	else if(path === "category"){
+		loadCategory();
+	} 
+	else {
+		loadCategory();
 		loadProductPage(path);
 	}
-	
 	
 }
 
 function loadProducts(category){
+	console.log("in loadproducts "+category)
 	$.ajax({
 		url : `/LoginDemo/products/getProducts?category=${category}`,
 		type : 'GET',
@@ -124,8 +135,6 @@ function loadProducts(category){
 			list.innerHTML = ""; 
 
 			renderProducts(products)
-
-			$('#content').addClass("hidden");
 			$('#product-list').removeClass("hidden");
 		},
 		error: function(err){
@@ -135,6 +144,7 @@ function loadProducts(category){
 }
 
 function renderProducts(products) {
+	console.log("In render products")
   const listContainer = document.getElementById('product-list');
   const template = document.getElementById('product-template');
 
@@ -157,10 +167,48 @@ function renderProducts(products) {
   });
 }
 
+function loadCategory(){
+	const links = document.getElementById("category-links");
+	links.innerHTML = ""; 
+	
+	$.ajax({
+      url: "/LoginDemo/products/getCategories",
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        var categoryDiv = $("#category-links");
+        
+        console.log(data);
+        
+        data.forEach(function (category) {
+          var categoryName = category.trim();
+          var categoryLink = $("<a>")
+            .text(categoryName)
+            .attr("href", "#")
+            .attr("data-category", categoryName)
+    		.addClass("category-link") 
+            .css({
+              display: "block",
+              color: "blue",
+              textDecoration: "underline",
+              cursor: "pointer"
+            });
+          categoryDiv.append(categoryLink);
+        });
+      },
+      error: function () {
+        $("#category-links").html("<p>Error loading categories.</p>");
+      }
+    });
+    
+    $('#content').addClass("hidden");
+	$('#productDisplay').addClass("hidden");
+	$('#product-list').addClass("hidden");
+	$('#category-links').removeClass('hidden');
+}
 
-
-$(document).ready(function () {
-	handleUrl();
-});
+//$(document).ready(function () {
+//	handleUrl();
+//});
 
 

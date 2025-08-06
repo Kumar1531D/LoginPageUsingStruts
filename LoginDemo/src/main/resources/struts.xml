@@ -6,33 +6,21 @@
 
 <struts>
 
-	<!-- Login -->
-	<!-- <package name = "login" namespace = "/" extends = "struts-default"> 
-		<action name = "checkUser" class="com.logindemo.action.LoginAction"></action> 
-		<action name="*" class="com.logindemo.action.UrlRedirectionAction"> <result 
-		name="success">/homePage.html</result> <result name="error">/error.html</result> 
-		</action> </package> -->
-
-	<!-- Signup -->
-	<!-- <package name = "signup" namespace = "/" extends = "struts-default"> 
-		<action name = "signupUser" class="com.logindemo.action.SignupAction"></action> 
-		</package> -->
-	<!-- Authentication -->
-	<!-- <package name = "authentication" namespace = "/" extends = "struts-default"> 
-		<action name = "authenticate" class="com.logindemo.action.AuthenticateAction"></action> 
-		</package> -->
-
-
 	<package name="jsonPackage" namespace = "/products" extends="json-default">
-	    <action name="getProducts" class="com.logindemo.action.ProductAction">
+	    <action name="getProducts" class="com.logindemo.action.ProductAction" method = "getProductsList">
 	        <result type="json">
 	            <param name="root">products</param>
 	        </result>
 	    </action>
+	    
+	    <action name="getCategories" class="com.logindemo.action.ProductAction" method = "getCategoryLists">
+	    	<result type = "json">
+	    		<param name="root">categoryList</param>
+	    	</result>
+	    
+	    </action>
 	</package>
 
-
-	<!-- Testing -->
 
 	<package name="auth" namespace="/" extends="struts-default">
 
@@ -45,15 +33,32 @@
 
 		<action name="signupUser" class="com.logindemo.action.UserAuthAction" method="signup"></action>
 
-		<action name="authenticate" class="com.logindemo.action.UserAuthAction" method="authenticate"></action>
+		<action name="authenticate" class="com.logindemo.action.UserAuthAction" method="authenticate">
+		
+			<result name ="success">/homePage.html</result>
+			<result name ="success">/Login.html</result>
+			
+		</action>
+		
+		<action name="logout" class="com.logindemo.action.UserAuthAction" method="logout">
+			<result name = "login">login</result>
+		</action>
 
 	</package>
-
-
-	<!-- <constant name="struts.action.extension" value="action,json" />  -->
-
 	
-
+	
+	<package name="default" namespace="/" extends="struts-default">
+	
+	    <action name="login">
+	        <result >Login.html</result>
+	    </action>
+	    
+	    <action name="home"  class="com.logindemo.action.UserAuthAction" method="authenticate">
+	        <result name = "success">homePage.html</result>
+	        <result name = "error" > login</result>
+	    </action>
+	    
+	</package>
 
 
 </struts>

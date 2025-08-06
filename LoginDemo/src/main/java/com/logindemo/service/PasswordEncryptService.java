@@ -36,8 +36,6 @@ public class PasswordEncryptService {
         byte[] salt = Base64.getDecoder().decode(parts[0]);
         String hashedInput = hashPassword(password, salt);
         
-        System.out.println(" "+parts[1].trim());
-        
         return hashedInput.trim().equals(parts[1].trim());
  
     }

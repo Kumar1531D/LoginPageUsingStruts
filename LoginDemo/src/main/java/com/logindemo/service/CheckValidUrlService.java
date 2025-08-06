@@ -13,7 +13,13 @@ public class CheckValidUrlService {
 		validUrls.add("fashion");
 		validUrls.add("home");
 		validUrls.add("signup");
-		validUrls.add("getProducts");
+		validUrls.add("getproducts");
+		validUrls.add("category");
+		validUrls.add("login");
+		validUrls.add("mobile");
+		validUrls.add("kitchenware");
+		validUrls.add("laptop");
+		
 	}
 	
 	public boolean isValid(String path) {
@@ -22,10 +28,10 @@ public class CheckValidUrlService {
 		
 		String endPoint = paths[paths.length-1];
 		
-		System.out.println("endpoint is "+endPoint);
+		System.out.println("end point is "+endPoint);
 		
-		if(validUrls.contains(endPoint)) {
-			System.out.println("true");
+		if(validUrls.contains(endPoint.toLowerCase())) {
+			System.out.println(true);
 			return true;
 		}
 		

@@ -11,14 +11,25 @@ public class ProductAction extends ActionSupport{
 	
 	private String category;
 	private List<Product> products;
+	private List<String> categoryList;
 	
-	public String execute() throws SQLException {
+	public String getProductsList() throws SQLException {
 		
 		DatabaseService databaseServie = new DatabaseService();
 		
 		products = databaseServie.getProductsByCategory(category);
 		
 		return SUCCESS;
+	}
+	
+	public String getCategoryLists() {
+		
+		DatabaseService databaseService = new DatabaseService();
+		
+		categoryList = databaseService.getCategory();
+		
+		return SUCCESS;
+		
 	}
 
 	public String getCategory() {
@@ -36,7 +47,14 @@ public class ProductAction extends ActionSupport{
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
+
+	public void setCategoryList(List<String> categoryList) {
+		this.categoryList = categoryList;
+	}
 	
+	public List<String> getCategoryList(){
+		return categoryList;
+	}
 	
 
 }

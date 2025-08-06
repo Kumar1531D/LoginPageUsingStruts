@@ -11,13 +11,7 @@
     <div class="logo">MyShop</div>
     <div class="nav-links">
       <div class="nav-item" id = "homeButton">Home</div>
-      <div class="nav-item">Products
-        <div class="dropdown-content">
-          <a href="#" class="product-link" data-category="Mobile">Mobile</a>
-          <a href="#" class="product-link" data-category="Laptop">Laptop</a>
-          <a href="#" class="product-link" data-category="Kitchenware">Kitchenware</a>
-        </div>
-      </div>
+      <div class="nav-item" id = "categoryButton">Category</div>
       <div class="nav-item signout">
         <button class="signout-btn" id="signoutBtn">Sign Out</button>
       </div>
@@ -29,13 +23,17 @@
     <p>Select a product category from the navigation bar.</p>
   </div>
   
+   <div class = "container hidden" id = "category-links"></div>
+  
   <div class = "container hidden" id = "productDisplay" >
   	<h2 id = "heading"> </h2>
   	<p id = "para"></p>
   </div>
   
-  <div class = "container" id = "product-list"> 
+  <div class = "container hidden" id = "product-list"> 
   </div>
+  
+  
   
   <template id="product-template">
 	  <div class="product-card">

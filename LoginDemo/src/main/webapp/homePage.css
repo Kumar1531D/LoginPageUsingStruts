@@ -1,7 +1,6 @@
 body {
 	margin: 0;
-	font-family: Arial, sans-serif;
-	display : none; 
+	font-family: Arial, sans-serif; 
 }
 
 .navbar {
@@ -79,6 +78,12 @@ body {
 	padding: 20px;
 	margin-top: 70px;
 }
+
+#category-links {
+  margin-top: 70px;
+  padding: 20px;
+}
+
 
 .hidden{
 	display : none;

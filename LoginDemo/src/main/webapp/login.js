@@ -18,7 +18,7 @@ $("#loginForm").submit( function(e){
 			if(data.status==="success"){
 				localStorage.setItem("jwt",data.token);
 				localStorage.setItem("userName",data.userName);
-				window.location.href = "homePage.html"; 
+				window.location.href = "home"; 
 			}
 			else{
 				alert("Invalid Login details");
@@ -41,6 +41,12 @@ $("#signupForm").submit(function(e){
 		if(data.includes("success")){
 			alert("Signup successful ")
 			loadLogin();
+		}
+		else if(data.includes("emailError")){
+			alert("Email already exists!")
+		}
+		else if(data.includes("userNameError")){
+			alert("Username already exists!")
 		}
 		else{
 			alert("Something is wrong! Try Again!");
@@ -94,7 +100,7 @@ window.addEventListener('load',checkIfLogin);
 
 function checkIfLogin(){
 	if(localStorage.getItem("jwt")!=null){
-		window.location.href = "homePage.html";
+		window.location.href = "home";
 	}
 	
 }

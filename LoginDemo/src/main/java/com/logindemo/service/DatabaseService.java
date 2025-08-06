@@ -159,6 +159,48 @@ public class DatabaseService {
 	    return new ArrayList<Product>(productMap.values());
 	    
 	}
+	
+	public List<String> getCategory(){
+		List<String> ans = new ArrayList<String>();
+		
+		Connection con = null;
+		
+		try {
+			Class.forName("org.postgresql.Driver");
+			
+			con = DriverManager.getConnection(url,user,pass);
+			
+			String qry = "SELECT name FROM category;";
+			
+			PreparedStatement ps = con.prepareStatement(qry);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				ans.add(rs.getString("name").trim());
+			}
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(con!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+		return ans;
+	}
 
 	
 

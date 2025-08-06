@@ -2,6 +2,8 @@ package com.logindemo.action;
 
 import java.io.IOException;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
@@ -9,6 +11,7 @@ import org.apache.struts2.ServletActionContext;
 import com.logindemo.service.DatabaseService;
 import com.logindemo.service.PasswordEncryptService;
 import com.logindemo.service.TokenGenerationService;
+import com.logindemo.service.UserService;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UserAuthAction extends ActionSupport{
@@ -20,9 +23,9 @@ public class UserAuthAction extends ActionSupport{
 	
 	public String login() throws IOException {
 		
-		System.out.println("In user auth action"+userName);
+		//DatabaseService databaseService = new DatabaseService();
 		
-		DatabaseService databaseService = new DatabaseService();
+		UserService userService = new UserService();
 		
 		TokenGenerationService tokenGenerationService = new TokenGenerationService();
 		
@@ -33,7 +36,9 @@ public class UserAuthAction extends ActionSupport{
 	    String token = tokenGenerationService.generateToken(userName);
 	    String jsonResponse = " ";
 	    
-	    String encryptedPassword = databaseService.loginCheck(userName);
+	   // String encryptedPassword = databaseService.loginCheck(userName);
+	    
+	    String encryptedPassword = userService.getPasswordForUser(userName);
 	    
 	    boolean isPasswordCorrect ;
 	    
@@ -55,6 +60,16 @@ public class UserAuthAction extends ActionSupport{
 			jsonResponse = "{ \"status\": \"error\", \"message\": \" not a valid user \" }";
 		}
 		
+		String contextPath = ServletActionContext.getRequest().getContextPath();
+
+		Cookie jwtCookie = new Cookie("token", token);
+		jwtCookie.setHttpOnly(true);
+		jwtCookie.setSecure(true);
+		jwtCookie.setPath(contextPath); // IMPORTANT
+		jwtCookie.setMaxAge(24 * 60 * 60); 
+
+		response.addCookie(jwtCookie);
+		
 		response.getWriter().write(jsonResponse);
 		
 		return NONE;
@@ -62,7 +77,9 @@ public class UserAuthAction extends ActionSupport{
 	
 	public String signup() throws Exception {
 		
-		DatabaseService db = new DatabaseService();
+		//DatabaseService db = new DatabaseService();
+		
+		UserService userService = new UserService();
 		
 		HttpServletResponse response = ServletActionContext.getResponse();
 		response.setContentType("text/plain");
@@ -73,7 +90,15 @@ public class UserAuthAction extends ActionSupport{
 			password[i] = '\u0000';
 		}
 		
-		if(db.insertNewUser(userName, encryptedPassword, email)) {
+		System.out.println(userName +" "+email);
+		
+		if(userService.isEmailExists(email) ) {
+			response.getWriter().write("emailError");
+		}
+		else if(userService.isUsernameExists(userName)) {
+			response.getWriter().write("userNameError");
+		}
+		else if(userService.createUser(userName, encryptedPassword, email)) {
 			
 			response.getWriter().write("success");
 		}
@@ -86,27 +111,47 @@ public class UserAuthAction extends ActionSupport{
 	
 	public String authenticate() throws IOException {
 		
-		TokenGenerationService tokenGenerationService  = new TokenGenerationService();
+		System.out.println("In authenticate");
 		
-		String userName = tokenGenerationService.validateToken(token);
+		HttpServletRequest request = ServletActionContext.getRequest();
 		
-		HttpServletResponse response = ServletActionContext.getResponse();
-	    response.setContentType("text/json");
-	    response.setCharacterEncoding("UTF-8");
-	    
-	    String jsonResponse = "";
+			Cookie[] cookies = request.getCookies();
+			if (cookies != null) {
+			    for (Cookie cookie : cookies) {
+			        if ("token".equals(cookie.getName())) {
+			            token = cookie.getValue();
+			            break;
+			        }
+			    }
+			}
+			
+		if(token!=null) {
 		
-		if(userName==null) {
-			jsonResponse = "{ \" status \" : \" error \" }";
+			TokenGenerationService tokenGenerationService  = new TokenGenerationService();
+			
+			String userName = tokenGenerationService.validateToken(token);
+			
+			if(userName != null)
+				return SUCCESS;
 		}
-		else {
-			jsonResponse = "{ \" status \" : \" success \" }";
-		}
 		
-		response.getWriter().write(jsonResponse);
-		
-		return NONE;
+		return ERROR;
 	}
+	
+	public String logout() {
+		HttpServletResponse response = ServletActionContext.getResponse();
+
+		String contextPath = ServletActionContext.getRequest().getContextPath();
+
+		Cookie cookie = new Cookie("token", "");
+		cookie.setMaxAge(0);
+		cookie.setPath(contextPath); // MUST match!
+		response.addCookie(cookie);
+
+	    return "login";
+	}
+	
+	
 
 	public String getUserName() {
 		return userName;
