@@ -6,6 +6,34 @@
 
 <struts>
 
+	<package name="default" namespace="/" extends="struts-default">
+	
+		<interceptors>
+			<interceptor name="Authentication" class="com.logindemo.interceptor.AuthenticationInterceptor"></interceptor>
+			<interceptor name="UrlAuthentication" class="com.logindemo.interceptor.UrlAuthenticationInterceptor"></interceptor>
+
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="Authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+	
+	    <action name="login">
+	        <interceptor-ref name="authStack"/>
+	        <result name = "success">/homePage.html</result>
+	        <result name = "login">/Login.html</result>
+	    </action>
+	    
+	    <action name="home">
+	    	<interceptor-ref name="authStack"/>
+	        <result name = "success">/homePage.html</result>
+	        <result name = "login" type="redirect" >login</result>
+	    </action>
+	    
+	</package>
+	
+	
+
 	<package name="jsonPackage" namespace = "/products" extends="json-default">
 	    <action name="getProducts" class="com.logindemo.action.ProductAction" method = "getProductsList">
 	        <result type="json">
@@ -20,17 +48,30 @@
 	    
 	    </action>
 	</package>
+	
+	
+	
+	<package name = "end" namespace = "/" extends = "struts-default">
+	
+		<action name="logout" class="com.logindemo.action.UserAuthAction" method="logout">
+			<result name = "success">/Login.html</result>
+		</action>
+	
+	</package>
+	
 
 
-	<package name="auth" namespace="/" extends="struts-default">
+	<package name="auth" namespace="/" extends="default">
 
 		<action name="checkUser" class="com.logindemo.action.UserAuthAction" method="login"></action>
 
 		<action name="*" class="com.logindemo.action.UrlRedirectionAction">
+			<interceptor-ref name="authStack"/>
 			<result name="success">/homePage.html</result>
 			<result name="error">/error.html</result>
+			<result name="login" type="redirect">login</result>
 		</action>
-
+		
 		<action name="signupUser" class="com.logindemo.action.UserAuthAction" method="signup"></action>
 
 		<action name="authenticate" class="com.logindemo.action.UserAuthAction" method="authenticate">
@@ -39,26 +80,8 @@
 			<result name ="success">/Login.html</result>
 			
 		</action>
-		
-		<action name="logout" class="com.logindemo.action.UserAuthAction" method="logout">
-			<result name = "login">login</result>
-		</action>
 
 	</package>
 	
-	
-	<package name="default" namespace="/" extends="struts-default">
-	
-	    <action name="login">
-	        <result >Login.html</result>
-	    </action>
-	    
-	    <action name="home"  class="com.logindemo.action.UserAuthAction" method="authenticate">
-	        <result name = "success">homePage.html</result>
-	        <result name = "error" > login</result>
-	    </action>
-	    
-	</package>
-
 
 </struts>

@@ -44,7 +44,7 @@ public class DbService {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace(); // You can improve with custom logging
+			e.printStackTrace();
 		}
 
 		return resultList;

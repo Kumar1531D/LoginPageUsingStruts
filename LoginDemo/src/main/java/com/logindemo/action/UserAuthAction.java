@@ -60,12 +60,12 @@ public class UserAuthAction extends ActionSupport{
 			jsonResponse = "{ \"status\": \"error\", \"message\": \" not a valid user \" }";
 		}
 		
-		String contextPath = ServletActionContext.getRequest().getContextPath();
+		//String contextPath = ServletActionContext.getRequest().getContextPath();
 
 		Cookie jwtCookie = new Cookie("token", token);
 		jwtCookie.setHttpOnly(true);
 		jwtCookie.setSecure(true);
-		jwtCookie.setPath(contextPath); // IMPORTANT
+		jwtCookie.setPath("/LoginDemo"); // IMPORTANT
 		jwtCookie.setMaxAge(24 * 60 * 60); 
 
 		response.addCookie(jwtCookie);
@@ -92,11 +92,11 @@ public class UserAuthAction extends ActionSupport{
 		
 		System.out.println(userName +" "+email);
 		
-		if(userService.isEmailExists(email) ) {
-			response.getWriter().write("emailError");
-		}
-		else if(userService.isUsernameExists(userName)) {
+		if(userService.isEmailExists(userName) ) {
 			response.getWriter().write("userNameError");
+		}
+		else if(userService.isUsernameExists(email)) {
+			response.getWriter().write("emailError");
 		}
 		else if(userService.createUser(userName, encryptedPassword, email)) {
 			
@@ -131,24 +131,27 @@ public class UserAuthAction extends ActionSupport{
 			
 			String userName = tokenGenerationService.validateToken(token);
 			
-			if(userName != null)
+			if(userName != null) {
 				return SUCCESS;
+			}
 		}
 		
 		return ERROR;
 	}
 	
 	public String logout() {
+		System.out.println("In logout");
+		
 		HttpServletResponse response = ServletActionContext.getResponse();
 
 		String contextPath = ServletActionContext.getRequest().getContextPath();
 
 		Cookie cookie = new Cookie("token", "");
 		cookie.setMaxAge(0);
-		cookie.setPath(contextPath); // MUST match!
+		cookie.setPath("/LoginDemo");
 		response.addCookie(cookie);
 
-	    return "login";
+	    return SUCCESS;
 	}
 	
 	

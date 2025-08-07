@@ -1,15 +1,18 @@
-package com.logindemo.action;
+package com.logindemo.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 
 import com.logindemo.service.CheckValidUrlService;
-import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
-public class UrlRedirectionAction extends ActionSupport{
-	
-	public String execute() {
+public class UrlAuthenticationInterceptor extends AbstractInterceptor{
+
+	@Override
+	public String intercept(ActionInvocation invocation) throws Exception {
+		System.out.println("In url authentication interceptor");
 		
 		HttpServletRequest request = ServletActionContext.getRequest();
 
@@ -25,10 +28,10 @@ public class UrlRedirectionAction extends ActionSupport{
 		}
         
 		if(new CheckValidUrlService().isValid(path)) {
-			return SUCCESS;
+			return "success";
 		}
 		
-		return ERROR;
+		return "error";
 	}
 
 }

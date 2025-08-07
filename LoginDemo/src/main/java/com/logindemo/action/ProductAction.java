@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.logindemo.modelClasses.Product;
 import com.logindemo.service.DatabaseService;
+import com.logindemo.service.ProductService;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class ProductAction extends ActionSupport{
@@ -15,18 +16,21 @@ public class ProductAction extends ActionSupport{
 	
 	public String getProductsList() throws SQLException {
 		
-		DatabaseService databaseServie = new DatabaseService();
+		//DatabaseService databaseServie = new DatabaseService();
 		
-		products = databaseServie.getProductsByCategory(category);
+		ProductService db = new ProductService();
+		
+		products = db.getProductsByCategory(category);
 		
 		return SUCCESS;
 	}
 	
 	public String getCategoryLists() {
 		
-		DatabaseService databaseService = new DatabaseService();
+		//DatabaseService databaseService = new DatabaseService();
+		ProductService db = new ProductService();
 		
-		categoryList = databaseService.getCategory();
+		categoryList = db.getAllCategories();
 		
 		return SUCCESS;
 		

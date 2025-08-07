@@ -1,11 +1,14 @@
-//window.addEventListener('load', isValidUser);
+window.addEventListener('load', loadName);
 window.addEventListener('DOMContentLoaded', handleUrl);
 window.addEventListener('storage',function(e){
 	if(e.key === 'logout'){
 		window.location.href = 'Login.html';
-	}
-	
+	}	
 })
+
+function loadName(){
+	document.getElementById("nameDisplay").textContent = localStorage.getItem('userName');
+}
 
 function isValidUser() {
 	let token1 = localStorage.getItem('jwt');
@@ -48,15 +51,21 @@ $("#signoutBtn").on('click',function(e){
 	let confirmationForSignout = confirm("Are you sure want to Signout")
 	
 	if(confirmationForSignout){
-		localStorage.removeItem("jwt");
 		localStorage.removeItem("userName");
 		localStorage.setItem('logout',Date.now())
 		$.ajax({
             url: 'logout',
             type: 'POST',
+            success : function(){
+				window.location.replace("login");
+        		window.location.href = 'login';
+			},
+			error : function(){
+				alert("something is wrong")
+			}
+			
         });
-         window.location.replace("login");
-         window.location.href = 'login';
+        
 	}
 })
 
@@ -144,7 +153,6 @@ function loadProducts(category){
 }
 
 function renderProducts(products) {
-	console.log("In render products")
   const listContainer = document.getElementById('product-list');
   const template = document.getElementById('product-template');
 

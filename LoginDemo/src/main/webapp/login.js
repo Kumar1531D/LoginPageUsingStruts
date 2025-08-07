@@ -16,7 +16,7 @@ $("#loginForm").submit( function(e){
 		
 		success : function(data){
 			if(data.status==="success"){
-				localStorage.setItem("jwt",data.token);
+				//localStorage.setItem("jwt",data.token);
 				localStorage.setItem("userName",data.userName);
 				window.location.href = "home"; 
 			}
@@ -96,7 +96,7 @@ window.onpopstate = function(event) {
     loadPageFromUrl();
 };
 
-window.addEventListener('load',checkIfLogin);
+//window.addEventListener('load',checkIfLogin);
 
 function checkIfLogin(){
 	if(localStorage.getItem("jwt")!=null){
